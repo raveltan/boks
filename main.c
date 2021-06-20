@@ -9,7 +9,7 @@
 
 // waitpid
 #include <sys/wait.h>
-// execv
+// execv,sethostname
 #include <unistd.h>
 
 #include <string.h>
@@ -20,7 +20,7 @@
 
 void run(int argc, char **argv);
 // Function to be used with clone
-int startAction(void *args);
+int processRun(void *args);
 // Program manual
 void manual();
 
@@ -64,7 +64,7 @@ void run(int argc, char **argv) {
   void *args = (void *)&data;
 
   pid_t child_pid =
-      clone(startAction, malloc(4096) + 4096, SIGCHLD | namespaces, args);
+      clone(processRun, malloc(4096) + 4096, SIGCHLD | namespaces, args);
   if (child_pid == -1) {
     perror("Clone error");
     exit(1);
@@ -72,11 +72,17 @@ void run(int argc, char **argv) {
   waitpid(child_pid, NULL, 0);
 }
 
-int startAction(void *args) {
+int processRun(void *args) {
+  // TODO: generate container hostname
+  // Set container hostname
+  char *hostname = "boks";
+  int result = sethostname(hostname, sizeof(hostname));
+
+  // run command
   struct run_data *data = (struct run_data *)args;
   char **execution_data = malloc((data->size - 2) * sizeof(char **));
   memcpy(execution_data, data->args + 2, (data->size - 2) * sizeof(char **));
-  int result = execv(data->args[2], execution_data);
+  result = execv(data->args[2], execution_data);
   if (result != 0) {
     perror("error");
   }

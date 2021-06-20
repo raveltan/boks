@@ -11,3 +11,4 @@ A simple linux container written in C.
 - https://www.youtube.com/watch?v=8fi7uSYlOdc
 - https://man7.org/linux/man-pages/man7/namespaces.7.html
 - https://man7.org/linux/man-pages/man2/clone.2.html
+- https://linux.die.net/man/2/sethostname
