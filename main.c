@@ -44,7 +44,13 @@ int main(int argc, char **argv) {
   }
   if (strcmp(argv[1], "run") || strcmp(argv[1], "r")) {
     if (argc < 3) {
-      perror("Please speficy a command to run");
+      printf("Please speficy a command to run\n");
+      exit(1);
+    }
+    char *data = getenv("BOKSFS");
+    if (data == NULL) {
+      printf("Please make sure that filesystem path is defined by BOKSFS env "
+             "variable\n");
       exit(1);
     }
     run(argc, argv);
@@ -55,7 +61,10 @@ int main(int argc, char **argv) {
 // Handle running command on container
 void run(int argc, char **argv) {
   // Flags to be used when cloning the processs
-  int namespaces = CLONE_NEWUTS;
+  //  CLONE_NEWUTS provides hostname and NIS Domain name isolation
+  //  CLONE_NEWPID alllows created container to have it's own PID namespace
+  //  -> this will not alter ps result as it gathers info from /proc
+  int namespaces = CLONE_NEWUTS | CLONE_NEWPID;
   // clone the process with the namepaces flags and run startAction inside of
   // it. CLONE require CAP_SYS_ADMIN thus needs to be run as root.
   struct run_data data;
@@ -66,7 +75,7 @@ void run(int argc, char **argv) {
   pid_t child_pid =
       clone(processRun, malloc(4096) + 4096, SIGCHLD | namespaces, args);
   if (child_pid == -1) {
-    perror("Clone error");
+    perror("Process clone error");
     exit(1);
   }
   waitpid(child_pid, NULL, 0);
@@ -84,7 +93,7 @@ int processRun(void *args) {
   memcpy(execution_data, data->args + 2, (data->size - 2) * sizeof(char **));
   result = execv(data->args[2], execution_data);
   if (result != 0) {
-    perror("error");
+    printf("Unable to execute command\n");
   }
   exit(result);
 }
