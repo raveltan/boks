@@ -2,9 +2,6 @@
 A simple UN*X container written in C. 
 > **WARNING:** Boks currently only tested on linux. functionallity under other UN*X based distribution is not tested.
 
-# Technology Used
-- namespaces
-
 # Get the filesystem
 Filesystem in boks acts like docker images, this allows container to have it's own PID and system root.
 
@@ -23,8 +20,6 @@ docker stop ubuntufs
 mkdir -p ~/ubuntufs
 tar xf ubuntufs.tar -C ~/ubuntufs/
 ```
-after getting the filesystem please set the BOKSFS environtment variable.
-you can either set it temporarily or permanently via shell config (~/.bashrc for bash, ~/.zshrc for zsh or ~/.profile).
 
 # Running Boks
 The easiest way to run boks is by getting the binary executable from the release section.
