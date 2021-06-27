@@ -166,5 +166,5 @@ int processRun(void *args) {
 }
 
 void manual() {
-  // Add program manual here
+  // TODO: Add program manual here
 }

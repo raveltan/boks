@@ -24,7 +24,13 @@ tar xf ubuntufs.tar -C ~/ubuntufs/
 # Running Boks
 The easiest way to run boks is by getting the binary executable from the release section.
 You can also build boks from scratch.
+
+```bash
+sudo BOKS_IMAGE=/home/raveltan/ubuntufs ./boks {{command}}
+```
+
 > As boks uses *CAP_SYS_ADMIN* capability boks needs to be run as root.
+
 
 ## Building Boks
 To build boks, make sure that you have a recent version of C compiler and make
