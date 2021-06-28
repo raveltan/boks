@@ -1,7 +1,8 @@
 // clone
 #define _GNU_SOURCE
 #include <sched.h>
-
+// time
+#include <time.h>
 // IO
 #include <stdio.h>
 // malloc, getenv
@@ -93,12 +94,15 @@ void run(int argc, char **argv) {
 }
 
 int processRun(void *args) {
-  // TODO: generate container hostname
+  // Generate container hostname
+    srand ( time(NULL) );
+    char* my_array[7] = {"elephant","wolf","eagle","tortoise","dog","tiger"};
+    int random_index = rand() % 7;
+    char* random_value = my_array[random_index];
 
   // Set container hostname
-  char *hostname = "boks";
+  char *hostname = random_value;
   int result = sethostname(hostname, sizeof(hostname));
-
   // setup cgroup
   char *cgroup_path = "sys/fs/cgroup/pids/boks";
   mkdir(cgroup_path, 0755);
@@ -127,7 +131,7 @@ int processRun(void *args) {
   }
   fclose(cgroup_procs_file);
 
-  // Set base directory to those of BOKS_IMAGE
+// Set base directory to those of BOKS_IMAGE
   char *new_root_path = getenv("BOKS_IMAGE");
   if (!new_root_path) {
     printf("Unable to get BOKS_IMAGE env variable.\n");
@@ -164,5 +168,5 @@ int processRun(void *args) {
 }
 
 void manual() {
-  // TODO: Add program manual here
+  printf("#BOKS_IMAGE={{environment}} ./boks {{command}} {{args..}}\n" );
 }
