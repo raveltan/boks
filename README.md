@@ -26,7 +26,7 @@ The easiest way to run boks is by getting the binary executable from the release
 You can also build boks from scratch.
 
 ```bash
-sudo BOKS_IMAGE=/home/raveltan/ubuntufs ./boks {{command}}
+sudo BOKS_IMAGE={{environment}} ./boks {{command}} {{args..}}
 ```
 
 > As boks uses *CAP_SYS_ADMIN* capability boks needs to be run as root.
