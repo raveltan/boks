@@ -102,7 +102,6 @@ int processRun(void *args) {
   // setup cgroup
   char *cgroup_path = "sys/fs/cgroup/pids/boks";
   mkdir(cgroup_path, 0755);
-  // Max pids
   FILE *max_pid_file = fopen(strcat(cgroup_path, "/pids.max"), "w+");
   if (fputs("10", max_pid_file) < 0) {
     printf("Unable to set max pids cgroup");
@@ -119,7 +118,6 @@ int processRun(void *args) {
   fclose(notify_on_release_file);
 
   FILE *cgroup_procs_file = fopen(strcat(cgroup_path, "/cgroup.procs"), "w+");
-  // Get current PID
   int process_id = getpid();
   char pid_string[30];
   sprintf(pid_string, "%d", process_id);
